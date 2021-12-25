@@ -4,13 +4,8 @@ phases:
   install:
     runtime-versions:
       java: corretto11
-    commands:
-      - echo installing maven...
-      - apt-get update -y
-      - apt-get install -y maven
   build:
     commands:
-      - mvn install
       - mvn package
       - sam package
         --template-file template.yml
