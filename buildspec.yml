@@ -1,16 +1,17 @@
 version: 0.2
-
 phases:
   install:
     runtime-versions:
       java: corretto11
+    commands:
+      - echo Build started on `date`
   build:
     commands:
+      - echo Build completed on `date`
       - mvn package
-      - sam package
-        --template-file template.yml
-        --s3-bucket iit-cloud
-        --output-template-file packaged-template.yml
-artifacts:
-  files:
-    - target/HelloWorld-1.0.jar
+      - echo "Zipping deployment package..."
+  post_build:
+    commands:
+      - echo "Updating lambda Function..."
+      - aws lambda update-function-code --function-name cloud_iit --zip-file fileb://./target/HelloWorld-1.0.jar
+      - echo "DONE!!"
